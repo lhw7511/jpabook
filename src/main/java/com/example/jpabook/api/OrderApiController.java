@@ -21,6 +21,15 @@ public class OrderApiController {
 
     private final OrderRepository orderRepository;
 
+    @GetMapping("/api/v3/orders")
+    public List<OrderDto> ordersV3(){
+        List<Order> orders = orderRepository.findAllWithItem();
+        List<OrderDto> result = orders.stream()
+                .map(o -> new OrderDto(o))
+                .collect(Collectors.toList());
+        return result;
+    }
+
     @GetMapping("/api/v1/orders")
     public List<Order> ordersV1(){
         List<Order> all = orderRepository.findAllByString(new OrderSearch());
