@@ -1,6 +1,7 @@
 package com.example.jpabook.api;
 
 import com.example.jpabook.domain.Member;
+import com.example.jpabook.repository.MemberRepository;
 import com.example.jpabook.service.MemberService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +18,15 @@ import java.util.stream.Collectors;
 public class MemberApiController {
 
     private final MemberService memberService;
+
+
+    @GetMapping("/api/v1/osivTest")
+    public List<Member> osivV1(){
+        List<Member> members = memberService.findMembers();
+        members.get(0).setName("osiv test");
+        memberService.update(members.get(1).getId(),"update test");
+        return members;
+    }
 
 
 
