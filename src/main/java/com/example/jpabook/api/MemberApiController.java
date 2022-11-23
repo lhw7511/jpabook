@@ -18,13 +18,13 @@ import java.util.stream.Collectors;
 public class MemberApiController {
 
     private final MemberService memberService;
-
+    private final MemberRepository memberRepository;
 
     @GetMapping("/api/v1/osivTest")
     public List<Member> osivV1(){
         List<Member> members = memberService.findMembers();
         members.get(0).setName("osiv test");
-        memberService.update(members.get(1).getId(),"update test");
+        memberRepository.findAll();
         return members;
     }
 

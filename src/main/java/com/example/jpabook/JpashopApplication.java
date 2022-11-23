@@ -3,10 +3,12 @@ package com.example.jpabook;
 import com.example.jpabook.domain.Address;
 import com.example.jpabook.domain.Member;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,11 @@ public class JpashopApplication {
 	@Bean
 	Hibernate5Module hibernate5Module(){
 		return new Hibernate5Module();
+	}
+
+	@Bean
+	JPAQueryFactory jpaQueryFactory(EntityManager em){
+		return new JPAQueryFactory(em);
 	}
 
 }

@@ -2,35 +2,36 @@ package com.example.jpabook.service;
 
 import com.example.jpabook.domain.item.Item;
 import com.example.jpabook.repository.ItemRepository;
+import com.example.jpabook.repository.datajpa.ItemDataJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ItemService {
 
-    private final ItemRepository itemRepository;
-
+    private final ItemDataJpaRepository itemDataJpaRepository;
     @Transactional
     public void saveItem(Item item){
-        itemRepository.save(item);
+        itemDataJpaRepository.save(item);
     }
 
     public List<Item> findItems(){
-        return itemRepository.findAll();
+        return itemDataJpaRepository.findAll();
     }
 
     public Item findOne(Long itemId){
-        return itemRepository.findOne(itemId);
+        return itemDataJpaRepository.findById(itemId).get();
     }
 
     @Transactional
     public void updateItem(Long itemId, String name, int price){
-        Item findItem = itemRepository.findOne(itemId);
+        Item findItem = itemDataJpaRepository.findById(itemId).get();
         findItem.setName(name);
         findItem.setPrice(price);
     }

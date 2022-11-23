@@ -30,7 +30,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr th:each="item : ${orders}">
+      <tr th:each="item : ${orders.content}">
         <td th:text="${item.id}"></td>
         <td th:text="${item.member.name}"></td>
         <td th:text="${item.orderItems[0].item.name}"></td>
@@ -44,6 +44,9 @@
              class="btn btn-danger">CANCEL</a>
         </td>
       </tr>
+      <span th:text="${orders.number}"></span>
+      <span th:text="${orders.totalPages}"></span>
+      <span th:text= "${orders.totalElements}"></span>
       </tbody>
     </table>
   </div>

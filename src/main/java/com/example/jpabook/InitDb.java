@@ -28,15 +28,18 @@ public class InitDb {
         private final EntityManager em;
         public void dbInit1(){
             Member member = createMember("userA", "서울", "1", "1111"); em.persist(member);
-            Book book1 = createBook("JPA1 BOOK", 10000, 100);
+            Book book1 = createBook("JPA1 BOOK", 10000, 1000);
             em.persist(book1);
-            Book book2 = createBook("JPA2 BOOK", 20000, 100);
+            Book book2 = createBook("JPA2 BOOK", 20000, 1000);
             em.persist(book2);
-            OrderItem orderItem1 = OrderItem.createOrderItem(book1, 10000, 1);
-            OrderItem orderItem2 = OrderItem.createOrderItem(book2, 20000, 2);
-            Order order = Order.createOrder(member, createDelivery(member),
-                    orderItem1, orderItem2);
-            em.persist(order);
+            for(int i = 0; i < 120; i++){
+                OrderItem orderItem1 = OrderItem.createOrderItem(book1, 10000, 1);
+                OrderItem orderItem2 = OrderItem.createOrderItem(book2, 20000, 2);
+                Order order = Order.createOrder(member, createDelivery(member),
+                        orderItem1, orderItem2);
+                em.persist(order);
+            }
+
         }
 
         private Member createMember(String name, String city, String street,

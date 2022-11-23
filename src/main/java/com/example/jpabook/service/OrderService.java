@@ -9,7 +9,12 @@ import com.example.jpabook.repository.ItemRepository;
 import com.example.jpabook.repository.MemberRepository;
 import com.example.jpabook.repository.OrderRepository;
 import com.example.jpabook.repository.OrderSearch;
+import com.example.jpabook.repository.datajpa.ItemDataJpaRepository;
+import com.example.jpabook.repository.datajpa.MemberDataJpaRepository;
+import com.example.jpabook.repository.datajpa.OrderDataJpaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,18 +24,17 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class OrderService {
+    private final MemberDataJpaRepository memberDataJpaRepository;
 
-    private final OrderRepository orderRepository;
+    private final ItemDataJpaRepository itemDataJpaRepository;
 
-    private final MemberRepository memberRepository;
-
-    private final ItemRepository itemRepository;
+    private final OrderDataJpaRepository orderDataJpaRepository;
 
     //주문
     @Transactional
     public Long order(Long memberId, Long itemId, int count){
-        Member member = memberRepository.findOne(memberId);
-        Item item = itemRepository.findOne(itemId);
+        Member member = memberDataJpaRepository.findById(memberId).get();
+        Item item = itemDataJpaRepository.findById(itemId).get();
 
         //배송정보 생성
         Delivery delivery = new Delivery();
@@ -42,18 +46,19 @@ public class OrderService {
         //주문생성
         Order order = Order.createOrder(member, delivery, orderItem);
 
-        orderRepository.save(order);
+        orderDataJpaRepository.save(order);
 
         return order.getId();
     }
 
     @Transactional
     public void cancelOrder(Long orderId){
-       Order order = orderRepository.findOne(orderId);
+       Order order = orderDataJpaRepository.findById(orderId).get();
        order.cancel();
     }
 
-    public List<Order> findOrders(OrderSearch orderSearch){
-        return orderRepository.findAll(orderSearch);
+    public Page<Order> findOrders(OrderSearch orderSearch){
+        PageRequest pageRequest = PageRequest.of(0,100);
+        return orderDataJpaRepository.findOrders(orderSearch,pageRequest);
     }
 }
