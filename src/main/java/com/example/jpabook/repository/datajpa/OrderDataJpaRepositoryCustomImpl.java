@@ -1,9 +1,6 @@
 package com.example.jpabook.repository.datajpa;
 
-import com.example.jpabook.domain.Order;
-import com.example.jpabook.domain.OrderStatus;
-import com.example.jpabook.domain.QMember;
-import com.example.jpabook.domain.QOrder;
+import com.example.jpabook.domain.*;
 import com.example.jpabook.repository.OrderSearch;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -19,6 +16,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static com.example.jpabook.domain.QDelivery.*;
 import static com.example.jpabook.domain.QMember.*;
 import static com.example.jpabook.domain.QOrder.*;
 
@@ -51,7 +49,10 @@ public class OrderDataJpaRepositoryCustomImpl implements OrderDataJpaRepositoryC
                 .from(order)
                 .join(order.member, member)
                 .fetchJoin()
+                .join(order.delivery,delivery)
+                .fetchJoin()
                 .where(statusEq(orderSearch.getOrderStatus()), nameLike(orderSearch.getMemberName()))
+                .orderBy(order.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -59,6 +60,7 @@ public class OrderDataJpaRepositoryCustomImpl implements OrderDataJpaRepositoryC
                 .select(order.count())
                 .from(order)
                 .join(order.member, member)
+                .join(order.delivery, delivery)
                 .where(statusEq(orderSearch.getOrderStatus()), nameLike(orderSearch.getMemberName()));
         return PageableExecutionUtils.getPage(content,pageable,total::fetchOne);
     }

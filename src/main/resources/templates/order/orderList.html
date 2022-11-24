@@ -31,24 +31,73 @@
       </thead>
       <tbody>
       <tr th:each="item : ${orders.content}">
-        <td th:text="${item.id}"></td>
-        <td th:text="${item.member.name}"></td>
-        <td th:text="${item.orderItems[0].item.name}"></td>
+        <td th:text="${item.orderId}"></td>
+        <td th:text="${item.name}"></td>
+        <td th:text="${item.orderItems[0].itemName}"></td>
         <td th:text="${item.orderItems[0].orderPrice}"></td>
         <td th:text="${item.orderItems[0].count}"></td>
-        <td th:text="${item.status}"></td>
+        <td th:text="${item.orderStatus}"></td>
         <td th:text="${item.orderDate}"></td>
         <td>
-          <a th:if="${item.status.name() == 'ORDER'}" href="#"
-             th:href="'javascript:cancel('+${item.id}+')'"
+          <a th:if="${item.orderStatus.name() == 'ORDER'}" href="#"
+             th:href="'javascript:cancel('+${item.orderId}+')'"
              class="btn btn-danger">CANCEL</a>
         </td>
       </tr>
-      <span th:text="${orders.number}"></span>
-      <span th:text="${orders.totalPages}"></span>
-      <span th:text= "${orders.totalElements}"></span>
       </tbody>
     </table>
+  </div>
+  <div th:if="${!orders.content.isEmpty()}">
+    <nav
+            th:with="
+                pageNumber = ${orders.pageable.pageNumber},
+                pageSize = ${orders.pageable.pageSize},
+                pageBlock = ${orders.pageable.pageSize/2},
+                totalPages = ${orders.totalPages},
+                startPage = ${T(java.lang.Math).floor(pageNumber / pageBlock) * pageBlock + 1},
+                tempEndPage = ${startPage + pageBlock - 1},
+                endPage = (${tempEndPage < totalPages ? tempEndPage : totalPages})"
+            aria-label="Page navigation">
+
+      <ul class="pagination">
+        <!-- 처음으로 이동 -->
+        <li th:classappend="${pageNumber < pageSize} ? 'disabled'" class="page-item">
+          <a class="page-link" th:href="@{/orders(page=0,memberName=${orderSearch.memberName},orderStatus=${orderSearch.orderStatus})}">
+            <span>&laquo;</span>
+            <span class="sr-only">First</span>
+          </a>
+        </li>
+
+        <!-- 이전으로 이동 -->
+        <li th:classappend="${orders.first} ? 'disabled'" class="page-item">
+          <a class="page-link" th:href="${orders.first} ? '#' : @{/orders(page=${pageNumber - 1},memberName=${orderSearch.memberName},orderStatus=${orderSearch.orderStatus})}" aria-label="Previous">
+            <span aria-hidden="true">&lt;</span>
+            <span class="sr-only">Previous</span>
+          </a>
+        </li>
+
+        <!-- 특정 페이지로 이동 -->
+        <li th:each="page: ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == pageNumber + 1} ? 'active'" class="page-item">
+          <a th:text="${page}" class="page-link" th:href="@{/orders(page=${page - 1},memberName=${orderSearch.memberName},orderStatus=${orderSearch.orderStatus})}"></a>
+        </li>
+
+        <!-- 다음으로 이동 -->
+        <li th:classappend="${orders.last} ? 'disabled'" class="page-item">
+          <a class="page-link" th:href="${orders.last} ? '#' : @{/orders(page=${pageNumber + 1},memberName=${orderSearch.memberName},orderStatus=${orderSearch.orderStatus})}" aria-label="Next">
+            <span aria-hidden="true">&gt;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+
+        <!-- 마지막으로 이동 -->
+        <li th:classappend=" ${T(java.lang.Math).floor(totalPages / pageSize) * pageSize - 1 <= startPage} ? 'disabled'" class="page-item">
+          <a class="page-link" th:href="@{/orders(page=${totalPages - 1},memberName=${orderSearch.memberName},orderStatus=${orderSearch.orderStatus})}">
+            <span>&raquo;</span>
+            <span class="sr-only">Last</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
   </div>
   <div th:replace="fragments/footer :: footer"/>
 </div> <!-- /container -->

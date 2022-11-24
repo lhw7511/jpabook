@@ -15,6 +15,7 @@ import com.example.jpabook.repository.datajpa.OrderDataJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,8 +58,7 @@ public class OrderService {
        order.cancel();
     }
 
-    public Page<Order> findOrders(OrderSearch orderSearch){
-        PageRequest pageRequest = PageRequest.of(0,100);
-        return orderDataJpaRepository.findOrders(orderSearch,pageRequest);
+    public Page<Order> findOrders(OrderSearch orderSearch, Pageable pageable){
+        return orderDataJpaRepository.findOrders(orderSearch,pageable);
     }
 }

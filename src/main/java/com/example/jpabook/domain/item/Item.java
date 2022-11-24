@@ -1,5 +1,6 @@
 package com.example.jpabook.domain.item;
 
+import com.example.jpabook.domain.BaseEntity;
 import com.example.jpabook.domain.Category;
 import com.example.jpabook.exception.NotEnoughStockException;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype")
 @Getter @Setter
-public abstract class Item {
+public abstract class Item extends BaseEntity {
 
     @Id
     @GeneratedValue
