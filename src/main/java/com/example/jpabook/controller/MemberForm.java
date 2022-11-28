@@ -13,4 +13,9 @@ public class MemberForm {
     private String city;
     private String street;
     private String zipcode;
+    @NotEmpty(message = "이메일은 필수입니다.")
+    private String email;
+    @NotEmpty(message = "비밀번호는 필수입니다.")
+    private String pw;
+    private String memberRole;
 }

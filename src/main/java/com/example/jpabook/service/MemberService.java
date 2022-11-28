@@ -1,10 +1,19 @@
 package com.example.jpabook.service;
 
+import com.example.jpabook.auth.MyMemberDetail;
 import com.example.jpabook.domain.Member;
+import com.example.jpabook.dto.MemberDto;
 import com.example.jpabook.repository.MemberRepository;
 import com.example.jpabook.repository.datajpa.MemberDataJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,11 +22,12 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class MemberService {
+public class MemberService implements UserDetailsService {
 
 
 
     private final MemberDataJpaRepository memberDataJpaRepository;
+    private final AuthenticationManager authenticationManager;
     //회원가입
     @Transactional
     public Long join(Member member){
@@ -49,4 +59,12 @@ public class MemberService {
         Member member = memberDataJpaRepository.findById(id).get();
         member.setName(name);
     }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Member member = memberDataJpaRepository.findByEmail(email);
+        return new MyMemberDetail(member);
+    }
+
+
 }

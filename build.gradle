@@ -1,7 +1,8 @@
 //querydsl 추가
 buildscript {
 	dependencies {
-	classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:1.0.10")
+		classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:1.0.10")
+
 	}
 }
 
@@ -34,6 +35,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-devtools'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	testImplementation 'junit:junit:4.13.1'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
@@ -54,7 +56,7 @@ tasks.named('test') {
 }
 
 //querydsl 추가
-def querydslDir = 'src/main/generated'
+def querydslDir = "$buildDir/generated/querydsl"
 
 querydsl {
 	library = "com.querydsl:querydsl-apt"

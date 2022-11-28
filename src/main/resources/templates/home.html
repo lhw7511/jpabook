@@ -5,6 +5,18 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
+<div>
+    <nav th:if="${memberEmail == null}">
+        <span>로그인안됨</span>
+        <a class="btn btn-lg btn-dark" href="/login">로그인</a>
+    </nav>
+    <nav th:unless="${memberEmail == null}">
+        <span th:text="${memberEmail}"></span>
+        <a class="btn btn-lg btn-dark" href="/logout">로그아웃</a>
+    </nav>
+
+
+</div>
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader" />
     <div class="jumbotron"> <h1>HELLO SHOP</h1>
