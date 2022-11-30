@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -27,7 +28,6 @@ public class MemberService implements UserDetailsService {
 
 
     private final MemberDataJpaRepository memberDataJpaRepository;
-    private final AuthenticationManager authenticationManager;
     //회원가입
     @Transactional
     public Long join(Member member){
@@ -63,7 +63,9 @@ public class MemberService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Member member = memberDataJpaRepository.findByEmail(email);
-        return new MyMemberDetail(member);
+
+
+        return Optional.ofNullable(member).map(MyMemberDetail::new).orElseThrow(()->new UsernameNotFoundException(email));
     }
 
 

@@ -1,9 +1,14 @@
 package com.example.jpabook.config;
 
+import com.example.jpabook.auth.CustomAuthFailureHandler;
+import com.example.jpabook.domain.Member;
+import com.example.jpabook.service.MemberService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,6 +19,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
+
+
+    @Bean
+    public CustomAuthFailureHandler customAuthFailureHandler(){return new CustomAuthFailureHandler();}
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
         return new BCryptPasswordEncoder();
@@ -29,10 +38,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                     .anyRequest().permitAll()
                 .and()
                     .formLogin()
+                    .loginProcessingUrl("/login")
+                    .loginPage("/loginForm")
                     .usernameParameter("email")			// 아이디 파라미터명 설정
                     .passwordParameter("pw")
                     .defaultSuccessUrl("/", true)
-                    .failureForwardUrl("/")
+                    .failureForwardUrl("/loginForm")
+                    .failureHandler(customAuthFailureHandler())
                     .permitAll()
                 .and()
                     .logout()
@@ -54,5 +66,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+
+
 
 }

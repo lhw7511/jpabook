@@ -8,7 +8,7 @@
 <div>
     <nav th:if="${memberEmail == null}">
         <span>로그인안됨</span>
-        <a class="btn btn-lg btn-dark" href="/login">로그인</a>
+        <a class="btn btn-lg btn-dark" href="/loginForm">로그인</a>
     </nav>
     <nav th:unless="${memberEmail == null}">
         <span th:text="${memberEmail}"></span>
