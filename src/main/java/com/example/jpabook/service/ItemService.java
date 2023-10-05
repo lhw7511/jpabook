@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class ItemService {
 
@@ -29,7 +29,7 @@ public class ItemService {
         return itemDataJpaRepository.findById(itemId).get();
     }
 
-    @Transactional
+
     public void updateItem(Long itemId, String name, int price){
         Item findItem = itemDataJpaRepository.findById(itemId).get();
         findItem.setName(name);

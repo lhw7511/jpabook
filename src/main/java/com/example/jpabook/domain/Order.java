@@ -11,13 +11,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "orders")
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED )
-public class Order extends BaseEntity{
+public class Order extends BaseUserEntity{
 
     @Id @GeneratedValue
     @Column(name = "order_id")

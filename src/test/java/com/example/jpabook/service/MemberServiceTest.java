@@ -32,8 +32,10 @@ public class MemberServiceTest {
         Member member = new Member();
         member.setName("lee");
         memberRepository.save(member);
-        member = memberRepository.findOne(member.getId());
-        System.out.println("test>>>>>>>>>>>>>>>>"+member.getId());
+        Member member2 = memberRepository.findOne(member.getId());
+        Member member3 = memberRepository.findOne(member.getId());
+        boolean flag = member2 == member3;
+       System.out.println("두객체가 같은가?>>>>" + flag );
     }
     /*
     @Test

@@ -142,4 +142,18 @@ public class OrderRepository {
         }
         return QOrder.order.status.eq(statusCond);
     }
+
+
+
+    public List<Order> test(String name){
+        List<Order> orders = em.createQuery(
+                        "select o " +
+                                "from Order o " +
+                                "join fetch o.member m " +
+                                "where m.name =:name"
+                                , Order.class)
+                .setParameter("name",name)
+                .getResultList();
+        return orders;
+    }
 }

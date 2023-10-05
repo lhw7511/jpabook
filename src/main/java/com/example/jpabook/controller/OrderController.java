@@ -4,6 +4,7 @@ import com.example.jpabook.domain.Member;
 import com.example.jpabook.domain.Order;
 import com.example.jpabook.domain.item.Item;
 import com.example.jpabook.dto.OrderDto;
+import com.example.jpabook.repository.OrderRepository;
 import com.example.jpabook.repository.OrderSearch;
 import com.example.jpabook.service.ItemService;
 import com.example.jpabook.service.MemberService;
@@ -17,7 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,6 +26,8 @@ public class OrderController {
     private final OrderService orderService;
     private final MemberService memberService;
     private final ItemService itemService;
+
+    private final OrderRepository orderRepository;
     
     @GetMapping("/order")
     public String createForm(Model model){
@@ -66,5 +68,12 @@ public class OrderController {
     public String cancelOrder(@PathVariable("orderId") Long orderId){
         orderService.cancelOrder(orderId);
         return "redirect:/orders";
+    }
+
+    @GetMapping("/test")
+    public void test(String name){
+
+        List<Order> test = orderRepository.test(name);
+
     }
 }

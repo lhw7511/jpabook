@@ -3,6 +3,7 @@ package com.example.jpabook.config;
 import com.example.jpabook.auth.CustomAuthFailureHandler;
 import com.example.jpabook.domain.Member;
 import com.example.jpabook.service.MemberService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -17,9 +18,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
+    private MemberService memberService;
 
     @Bean
     public CustomAuthFailureHandler customAuthFailureHandler(){return new CustomAuthFailureHandler();}
@@ -51,8 +54,16 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                     .logoutSuccessUrl("/")
                     .invalidateHttpSession(true)
                 .and()
-                .exceptionHandling()
-                .accessDeniedPage("/accessDenied");
+                    .exceptionHandling()
+                    .accessDeniedPage("/accessDenied")
+                .and()
+                .rememberMe()
+                .key("remember-Me")
+                .rememberMeParameter("remember")
+                .tokenValiditySeconds(86400)
+                .userDetailsService(memberService);
+
+
     }
 
     //web자원은 필터링 무시

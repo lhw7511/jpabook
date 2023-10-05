@@ -33,4 +33,14 @@ public class MemberRepository {
     }
 
 
+    public List<Member> testMember(Long userId){
+        List<Member> members = em.createQuery("select m from Member m", Member.class).getResultList();
+        System.out.println("----------------------------------------");
+        members.stream().forEach(m -> m.getOrders().stream().forEach(o-> o.getId()));
+        return members;
+    }
+
+
+
+
 }
