@@ -45,6 +45,7 @@ public class MemberService implements UserDetailsService {
     }
     //회원 전체 조회
 
+    @Transactional
     public List<Member> findMembers(){
         return memberDataJpaRepository.findAll();
     }
@@ -66,6 +67,11 @@ public class MemberService implements UserDetailsService {
 
 
         return Optional.ofNullable(member).map(MyMemberDetail::new).orElseThrow(()->new UsernameNotFoundException(email));
+    }
+
+    @Transactional
+    public void dirtyCheckingTest(Member memberOne){
+        memberOne.setName("updateName");
     }
 
 

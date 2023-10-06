@@ -77,28 +77,11 @@ public class MemberController {
     public void memberTest(Long memberId){
         memberRepository.testMember(memberId);
     }
+    
+    
 
-    @PostMapping("/exception")
-    public void exceptionTest() throws Exception {
-        throw new Exception();
-    }
 
-    @PostMapping("/nullException")
-    public void exceptionTest2() throws Exception {
-        throw new NullPointerException();
-    }
 
-    @ExceptionHandler(value = Exception.class)
-    public ResponseEntity<Map<String,String>> ExcetionHandler(Exception e){
-        log.info("지역 컨트롤러에서 예외처리");
-        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-        Map<String,String> resultMap = new HashMap<>();
-        resultMap.put("error type", httpStatus.getReasonPhrase());
-        resultMap.put("code","400");
-        resultMap.put("message","에러발생");
-
-        return ResponseEntity.status(httpStatus).body(resultMap);
-    }
 
 
 }
