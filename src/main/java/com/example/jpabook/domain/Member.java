@@ -15,6 +15,10 @@ import java.util.List;
 @Entity
 @Getter @Setter
 @NoArgsConstructor
+@NamedQuery(
+        name="Member.findByName",
+        query="select m from Member m where m.username = :username"
+)
 public class Member extends BaseEntity{
 
     @Id @GeneratedValue
