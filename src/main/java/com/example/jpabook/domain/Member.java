@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @NamedQuery(
         name="Member.findByName",
-        query="select m from Member m where m.username = :username"
+        query="select m from Member m where m.name = :name"
 )
 public class Member extends BaseEntity{
 

@@ -2,7 +2,9 @@ package com.example.jpabook.controller;
 
 
 import com.example.jpabook.domain.Member;
+import com.example.jpabook.dto.MemberDto;
 import com.example.jpabook.repository.MemberRepository;
+import com.example.jpabook.repository.datajpa.MemberDataJpaRepository;
 import com.example.jpabook.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +29,8 @@ public class ExampleController {
     private final MemberService memberService;
 
     private final MemberRepository memberRepository;
+
+    private final MemberDataJpaRepository memberDataJpaRepository;
 
     @PostMapping("/exception")
     public void exceptionTest() throws Exception {
@@ -69,5 +74,18 @@ public class ExampleController {
         return members;
     }
 
+    @GetMapping("queryMethodDtoTest")
+    public MemberDto queryMethodDtoTest(String name){
+        return memberDataJpaRepository.findByNameDto(name);
+    }
 
+    @GetMapping("queryMethodValueTest")
+    public String queryMethodValueTest(Long id){
+        return memberDataJpaRepository.findByIdValue(id);
+    }
+
+    @GetMapping("collectionParamBindingTest")
+    public List<Member> collectionParamBindingTest(){
+        return  memberDataJpaRepository.findByNames(Arrays.asList("userA","userB"));
+    }
 }
