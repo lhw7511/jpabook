@@ -2,12 +2,17 @@ package com.example.jpabook.controller;
 
 
 import com.example.jpabook.domain.Member;
+import com.example.jpabook.domain.Order;
 import com.example.jpabook.dto.MemberDto;
+import com.example.jpabook.dto.OrderDto;
 import com.example.jpabook.repository.MemberRepository;
 import com.example.jpabook.repository.datajpa.MemberDataJpaRepository;
+import com.example.jpabook.repository.datajpa.OrderDataJpaRepository;
 import com.example.jpabook.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -31,6 +36,8 @@ public class ExampleController {
     private final MemberRepository memberRepository;
 
     private final MemberDataJpaRepository memberDataJpaRepository;
+
+    private final OrderDataJpaRepository orderDataJpaRepository;
 
     @PostMapping("/exception")
     public void exceptionTest() throws Exception {
@@ -87,5 +94,13 @@ public class ExampleController {
     @GetMapping("collectionParamBindingTest")
     public List<Member> collectionParamBindingTest(){
         return  memberDataJpaRepository.findByNames(Arrays.asList("userA","userB"));
+    }
+
+
+    @GetMapping("jpaPagingTest")
+    public Page<OrderDto> jpaPagingTest(int pageNum){
+        PageRequest page = PageRequest.of(pageNum - 1, 5);
+        Page<Order> orderPage = orderDataJpaRepository.findOrderPage(page);
+        return orderPage.map(OrderDto::new);
     }
 }
