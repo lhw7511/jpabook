@@ -9,6 +9,7 @@ import com.example.jpabook.repository.MemberRepository;
 import com.example.jpabook.repository.datajpa.MemberDataJpaRepository;
 import com.example.jpabook.repository.datajpa.OrderDataJpaRepository;
 import com.example.jpabook.service.MemberService;
+import com.example.jpabook.utils.Week;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -102,5 +103,15 @@ public class ExampleController {
         PageRequest page = PageRequest.of(pageNum - 1, 5);
         Page<Order> orderPage = orderDataJpaRepository.findOrderPage(page);
         return orderPage.map(OrderDto::new);
+    }
+
+    @GetMapping("enumTest")
+    public void enumTest(){
+        for(Week week : Week.values()){
+            System.out.println(week.name());
+            System.out.println(week.getTitle());
+            System.out.println(week.getValue());
+            System.out.println("---------------------------");
+        }
     }
 }
